@@ -388,21 +388,21 @@ Let's get started! Use /newpost to create your first post.
                             chat_id=channel,
                             photo=thumbnail['file_id'],
                             caption=caption,
-                            parse_mode='MarkdownV2'
+                            parse_mode='HTML'
                         )
                     elif thumbnail['type'] == 'video':
                         await context.bot.send_video(
                             chat_id=channel,
                             video=thumbnail['file_id'],
                             caption=caption,
-                            parse_mode='MarkdownV2'
+                            parse_mode='HTML'
                         )
                     elif thumbnail['type'] == 'animation':
                         await context.bot.send_animation(
                             chat_id=channel,
                             animation=thumbnail['file_id'],
                             caption=caption,
-                            parse_mode='MarkdownV2'
+                            parse_mode='HTML'
                         )
                     
                     success_count += 1
@@ -443,20 +443,16 @@ Let's get started! Use /newpost to create your first post.
             title = post_data.get('title', 'Untitled')
             video_link = post_data.get('video_link', '')
             
-            # Escape special markdown characters in user input
-            title = self.escape_markdown(title)
-            video_link = self.escape_markdown(video_link)
-            
+            # Don't escape title and link - use HTML instead
             post = f"""
-╔══════════════════════╗
-   🌟 *{title}* 🌟
-╚══════════════════════╝
+{title}
 
-🔗 *Watch Now:*
-{video_link}
+🚀 <b>Dᴏᴡɴʟᴏᴀᴅ</b> 👉 {video_link}
+
+🍷 <b>Wᴀᴛᴄʜ Tᴜᴛᴏʀɪᴀʟ</b> 👉 https://t.me/NeonGhost_Network
 
 ━━━━━━━━━━━━━━━━━━━━
-📢 Join: @NeonGhost\\_Network
+📢 <b>Join:</b> @NeonGhost_Network
 ━━━━━━━━━━━━━━━━━━━━
             """
             return post.strip()
@@ -465,16 +461,8 @@ Let's get started! Use /newpost to create your first post.
             return "Error formatting post"
     
     def escape_markdown(self, text: str) -> str:
-        """Escape markdown special characters"""
-        try:
-            # Characters that need escaping in Markdown
-            escape_chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
-            for char in escape_chars:
-                text = text.replace(char, f'\\{char}')
-            return text
-        except Exception as e:
-            logger.error(f"Error escaping markdown: {e}")
-            return text
+        """Escape markdown special characters - Not needed for HTML mode"""
+        return text
     
     async def manage_channels(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Manage channels for posting"""
@@ -869,11 +857,6 @@ if __name__ == '__main__':
         bot.run()
     except Exception as e:
         logger.error(f"Failed to start bot: {e}", exc_info=True)
-
-
-
-
-
 
 
 
